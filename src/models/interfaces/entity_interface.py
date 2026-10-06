@@ -29,3 +29,7 @@ class EntityInterface(ABC):
     @abstractmethod
     def list_users(self):
         """Método responsável pela listagem de todos os usuários cadastrados."""
+
+    @abstractmethod
+    def get_user(self, user_id: int):
+        """Busca um usuário específico no banco pelo ID."""

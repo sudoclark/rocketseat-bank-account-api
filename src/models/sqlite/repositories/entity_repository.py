@@ -1,8 +1,8 @@
 """
-Esse módulo é o responsável pela comunicação direta com
-o banco de dados. Nós usamos a 'session' declarada no arquivo
-settings/connection para conversar com o Banco, representado
-pela classe 'Entity' declarada em entities/entity.
+Esse módulo é o responsável pela comunicação direta com o banco de dados. Nós usamos a 'session' declarada no arquivo
+settings/connection para conversar com o Banco, representado pela classe 'Entity' declarada em entities/entity.
+Importante ressaltar que 'Entity' é uma coisa só, representa a conta e o usuário, por isso coloquei todas as funções
+no mesmo lugar.
 """
 
 from src.models.interfaces.entity_interface import EntityInterface
@@ -43,6 +43,15 @@ class SqliteEntityRepository(EntityInterface):
                 users = database.session.query(Entity).all()
 
                 return users
+            except Exception as ex:
+                raise ex
+
+    def get_user(self, user_id):
+        with self.__db_connection as database:
+            try:
+                user = database.session.query(Entity).filter(Entity.id == user_id).first()
+
+                return user
             except Exception as ex:
                 raise ex
 
