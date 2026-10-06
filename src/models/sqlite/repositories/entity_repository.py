@@ -18,6 +18,34 @@ class SqliteEntityRepository(EntityInterface):
     def __init__(self, db_connection: DbConnectionManager):
         self.__db_connection = db_connection
 
+    def create_user(self, monthly_income, age, full_name, phone, email, category, balance):
+        with self.__db_connection as database:
+            try:
+                user = Entity(
+                    monthly_income=monthly_income,
+                    age=age,
+                    full_name=full_name,
+                    phone=phone,
+                    email=email,
+                    category=category,
+                    balance=balance
+                )
+
+                database.session.add(user)
+                database.session.commit()
+            except Exception as ex:
+                database.session.rollback()
+                raise ex
+
+    def list_users(self):
+        with self.__db_connection as database:
+            try:
+                users = database.session.query(Entity).all()
+
+                return users
+            except Exception as ex:
+                raise ex
+
     def withdraw(self, user_id: int, value: float):
         with self.__db_connection as database:
             try:

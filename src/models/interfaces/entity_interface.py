@@ -21,3 +21,11 @@ class EntityInterface(ABC):
     @abstractmethod
     def check_balance(self, user_id:int):
         """Método responsável pela verificação do saldo."""
+
+    @abstractmethod
+    def create_user(self, monthly_income: float, age: int, full_name: str, phone: str, email: str, category: str, balance: float):
+        """Método responsável pela criação de um novo usuário."""
+
+    @abstractmethod
+    def list_users(self):
+        """Método responsável pela listagem de todos os usuários cadastrados."""

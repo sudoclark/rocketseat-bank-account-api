@@ -49,6 +49,26 @@ def test_check_balance_real():
 
     assert balance == 950
 
+@pytest.mark.skip(reason="Integração direta com o Banco de Dados")
+def test_create_user_real():
+    """
+    Teste real de criação de usuário, tem um skip então não
+    roda com os demais testes.
+    """
+    repository = SqliteEntityRepository(db_manager)
+    repository.create_user(400, 18, "Cleiton Alves", "912345678", "cleiton.alves@email.com", "individual", 700.99)
+
+@pytest.mark.skip(reason="Integração direta com o Banco de Dados")
+def test_list_users_real():
+    """
+    Teste real para listagem de usuários, possui um skip, então ele
+    não roda com os demais testes.
+    """
+    repository = SqliteEntityRepository(db_manager)
+    users = repository.list_users()
+
+    assert len(users) == 2
+
 def test_withdraw():
     """Testa se a operação de saque está funcionando."""
     connection = MockConnection()
@@ -68,6 +88,26 @@ def test_check_balance():
 
     connection.session.query.assert_called_once_with(Entity)
     connection.session.filter.assert_called_once_with(Entity.id == 1)
+
+def test_create_user():
+    """Testa a criação de usuários."""
+    connection = MockConnection()
+    repository = SqliteEntityRepository(connection)
+
+    repository.create_user(400, 18, "Cleiton Alves", "912345678", "cleiton.alves@email.com", "individual", 700.99)
+
+    connection.session.add.assert_called_once()
+    connection.session.commit.assert_called_once()
+
+def test_list_users():
+    """Testa a listagem de usuários."""
+    connection = MockConnection()
+    repository = SqliteEntityRepository(connection)
+
+    repository.list_users()
+
+    connection.session.query.assert_called_once_with(Entity)
+    connection.session.all.assert_called_once()
 
 def test_withdraw_error():
     """
