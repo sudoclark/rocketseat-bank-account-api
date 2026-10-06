@@ -7,6 +7,9 @@ ao repositório.
 from src.models.interfaces.entity_interface import EntityInterface
 from src.validators.entity_type_enum import EntityType
 from src.validators.schemas import DataResponseSchema, ResponseSchema
+from src.errors.http_errors.bad_request_error import BadRequestError
+from src.errors.http_errors.not_found_error import NotFoundError
+from src.errors.http_errors.unprocessable_entity_error import UnprocessableEntityError
 
 class EntityController:
     """
@@ -29,7 +32,7 @@ class EntityController:
         errors = self.__validate_user_data(age, full_name, email, category)
 
         if errors:
-            raise Exception("Dados inválidos, verifique as informações enviadas")
+            raise BadRequestError("Dados inválidos, verifique as informações enviadas")
 
         self.__insert_user_into_db(monthly_income, age, full_name, phone, email, category, balance)
         response = self.__format_response(count=1, entity_type="User", operation="create_user")
@@ -41,9 +44,12 @@ class EntityController:
         users = self.__repository.list_users()
 
         if not users:
-            raise Exception("Nenhum usuário encontrado")
+            raise NotFoundError("Nenhum usuário encontrado")
 
-        return users
+        users_formatted = [{"full_name": user.full_name, "age": user.age, "email": user.email, "category": user.category} for user in users]
+        response = self.__format_response(count=len(users), entity_type="User", operation="list_users", details=users_formatted)
+
+        return response
 
     def withdraw(self, user_id, value):
         """Método para saque."""
@@ -89,14 +95,14 @@ class EntityController:
         Se qualquer condição não for atendida, levanta uma exceção.
         """
         if value <= 0:
-            raise Exception("Valor de saque não pode ser menor ou igual a zero.")
+            raise BadRequestError("Valor de saque não pode ser menor ou igual a zero.")
 
         if value > 500:
             if user.category == EntityType.INDIVIDUAL:
-                raise Exception("Sua conta é pessoa física, você só pode sacar até R$500.")
+                raise UnprocessableEntityError("Sua conta é pessoa física, você só pode sacar até R$500.")
 
         if value > user.balance:
-            raise Exception("Saldo insuficiente.")
+            raise UnprocessableEntityError("Saldo insuficiente.")
 
     def __validate_user(self, user_id):
         """
@@ -106,7 +112,7 @@ class EntityController:
         user = self.__repository.get_user(user_id)
 
         if not user:
-            raise Exception("Nenhum usuário encontrado com o ID informado.")
+            raise NotFoundError("Nenhum usuário encontrado com o ID informado.")
 
         return user
 
