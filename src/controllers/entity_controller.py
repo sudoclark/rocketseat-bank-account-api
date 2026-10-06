@@ -137,7 +137,7 @@ class EntityController:
                 errors.append({"field": "full_name", "error": "Nome inválido, somente letras e acentos são válidos"})
 
         if age < 16:
-            errors.append({"field": "age", "erro": "Você precisa ter 16 ou mais anos para criar uma conta"})
+            errors.append({"field": "age", "error": "Você precisa ter 16 ou mais anos para criar uma conta"})
 
         if "@" not in email:
             errors.append({"field": "email", "error": "E-mail inválido, verifique as informações enviadas"})
