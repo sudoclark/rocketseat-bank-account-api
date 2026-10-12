@@ -39,12 +39,9 @@ class SqliteEntityRepository(EntityInterface):
 
     def list_users(self):
         with self.__db_connection as database:
-            try:
-                users = database.session.query(Entity).all()
+            users = database.session.query(Entity).all()
 
-                return users
-            except Exception as ex:
-                raise ex
+            return users
 
     def get_user(self, user_id):
         with self.__db_connection as database:

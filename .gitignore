@@ -1,0 +1,15 @@
+# Arquivos de configuração
+.pre-commit-config.yaml
+.pylintrc
+ex_pylint.py
+.vscode
+
+# Ambiente virtual
+venv
+
+# Arquivos de cache
+**/__pycache__
+.pytest_cache
+
+# Banco de dados
+storage.db

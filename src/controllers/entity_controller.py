@@ -5,7 +5,6 @@ ao repositório.
 """
 
 from src.models.interfaces.entity_interface import EntityInterface
-from src.validators.entity_type_enum import EntityType
 from src.validators.schemas import DataResponseSchema, ResponseSchema
 from src.errors.http_errors.bad_request_error import BadRequestError
 from src.errors.http_errors.not_found_error import NotFoundError
@@ -32,7 +31,7 @@ class EntityController:
         errors = self.__validate_user_data(age, full_name, email, category)
 
         if errors:
-            raise BadRequestError("Dados inválidos, verifique as informações enviadas")
+            raise BadRequestError("Dados inválidos, verifique as informações enviadas", details={"errors": errors})
 
         self.__insert_user_into_db(monthly_income, age, full_name, phone, email, category, balance)
         response = self.__format_response(count=1, entity_type="User", operation="create_user")
@@ -98,7 +97,7 @@ class EntityController:
             raise BadRequestError("Valor de saque não pode ser menor ou igual a zero.")
 
         if value > 500:
-            if user.category == EntityType.INDIVIDUAL:
+            if user.category == "individual":
                 raise UnprocessableEntityError("Sua conta é pessoa física, você só pode sacar até R$500.")
 
         if value > user.balance:
@@ -137,12 +136,12 @@ class EntityController:
                 errors.append({"field": "full_name", "error": "Nome inválido, somente letras e acentos são válidos"})
 
         if age < 16:
-            errors.append({"field": "age", "error": "Você precisa ter 16 ou mais anos para criar uma conta"})
+            errors.append({"field": "age", "error": "Você precisa ter 16 anos ou mais para criar uma conta"})
 
         if "@" not in email:
             errors.append({"field": "email", "error": "E-mail inválido, verifique as informações enviadas"})
 
-        if category not in EntityType:
+        if category not in ["individual", "legal"]:
             errors.append({"field": "category", "error": "Categoria inválida, uma conta só pode ser 'individual' (física) ou 'legal' (jurídica)"})
 
         return errors
@@ -161,4 +160,4 @@ class EntityController:
                 operation=operation,
                 details=details
             )
-        )
+        ).model_dump()

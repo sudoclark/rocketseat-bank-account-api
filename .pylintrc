@@ -6,7 +6,11 @@ disable=
       C0321, # multiple-statements
       R0913, # too-many-arguments
       R0917, # too-many-positional-arguments
+      E1121, # too-many-function-args
       W0622, # redefined-builtin
+      W0718, # broad-exception-caught
+      E1124, # redundant-keyword-arg
+      W0613, # unused-argument
 
 # Analyse import fallback blocks. This can be used to support both Python 2 and
 # 3 compatible code, which means that the block might have code that exists
