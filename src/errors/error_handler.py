@@ -14,16 +14,17 @@ def handler_error(error: Exception) -> dict:
     if isinstance(error, BaseError):
         return({
             "status_code": error.status_code,
-            "details": [{
+            "data": {
                 "title": error.type,
-                "message": error.message
-            }]
+                "message": error.message,
+                "details": error.details
+            }
         })
 
     return({
         "status_code": 500,
-        "details": [{
+        "data": {
             "title": "Server Error",
             "message": str(error)
-        }]
+        }
     })

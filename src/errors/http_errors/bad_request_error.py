@@ -7,5 +7,5 @@ from .base_error import BaseError
 
 class BadRequestError(BaseError):
     """Classe responsável pelos erros 'Bad Request'"""
-    def __init__(self, message: str):
-        super().__init__(message, status_code=400, type="BadRequest")
+    def __init__(self, message: str, details: dict = None):
+        super().__init__(message, status_code=400, type="BadRequest", details=details)

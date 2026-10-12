@@ -8,5 +8,5 @@ from .base_error import BaseError
 
 class UnprocessableEntityError(BaseError):
     """Classe responsável pelos erros 'Unprocessable Entity'"""
-    def __init__(self, message: str):
-        super().__init__(message, status_code=422, type="UnprocessableEntity")
+    def __init__(self, message: str, details: dict = None):
+        super().__init__(message, status_code=422, type="UnprocessableEntity", details=details)
