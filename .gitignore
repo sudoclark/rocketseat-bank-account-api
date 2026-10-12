@@ -8,7 +8,8 @@ ex_pylint.py
 venv
 
 # Arquivos de cache
-**/__pycache__
+__pycache__
+*.pyc
 .pytest_cache
 
 # Banco de dados
