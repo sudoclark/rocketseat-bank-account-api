@@ -1,11 +1,11 @@
-from typing import Optional, Union
-from pydantic import BaseModel, Field
+from typing import Optional, Any
+from pydantic import BaseModel
 
 class ResponseSchema(BaseModel):
     entity_type: str
     operation: str
     count: int
-    details: Optional[Union[str, list, dict, int, float]] = None
+    details: Optional[Any] = None
 
 class DataResponseSchema(BaseModel):
     data: ResponseSchema

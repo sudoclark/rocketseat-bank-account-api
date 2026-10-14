@@ -45,12 +45,9 @@ class SqliteEntityRepository(EntityInterface):
 
     def get_user(self, user_id):
         with self.__db_connection as database:
-            try:
-                user = database.session.query(Entity).filter(Entity.id == user_id).first()
+            user = database.session.query(Entity).filter(Entity.id == user_id).first()
 
-                return user
-            except Exception as ex:
-                raise ex
+            return user
 
     def withdraw(self, user_id: int, value: float):
         with self.__db_connection as database:
@@ -65,9 +62,6 @@ class SqliteEntityRepository(EntityInterface):
 
     def check_balance(self, user_id: int):
         with self.__db_connection as database:
-            try:
-                user = database.session.query(Entity).filter(Entity.id == user_id).first()
+            user = database.session.query(Entity).filter(Entity.id == user_id).first()
 
-                return user.balance
-            except Exception as ex:
-                raise ex
+            return user.balance
